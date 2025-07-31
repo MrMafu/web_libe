@@ -1,5 +1,5 @@
 import React from "react";
-import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faClockRotateLeft, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 import StatusCard from "../status-card";
 import QuickActions from "../quick-actions";
@@ -13,8 +13,8 @@ type statusCard = {
 
 const statusCards: statusCard[] = [
     { name: "Total Books", value: 10, icon: faBook },
-    { name: "Active Borrowings", value: 10, icon: faBook },
-    { name: "Pending Fines", value: 10, icon: faBook },
+    { name: "Active Borrowings", value: 10, icon: faUpRightFromSquare },
+    { name: "Pending Fines", value: 10, icon: faClockRotateLeft },
 ]
 
 export default function Dashboard() {
