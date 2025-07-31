@@ -16,7 +16,7 @@ export default function StatusCard({name, value, icon}: Prop) {
                 <FontAwesomeIcon icon={icon} className="text-[var(--main-theme)]" />
             </div>
             <div>
-                <h1 className="text-xl text-gray-700 font-bold">{value}</h1>
+                <h1 className="text-xl text-gray-800 font-bold">{value}</h1>
                 <p className="text-gray-400">{name}</p>
             </div>
         </div>
