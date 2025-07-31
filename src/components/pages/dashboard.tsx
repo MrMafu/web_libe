@@ -5,13 +5,25 @@ import StatusCard from "../status-card";
 import QuickActions from "../quick-actions";
 import Chart from "../chart";
 
+type statusCard = {
+    name: string,
+    value: number,
+    icon: any
+}
+
+const statusCards: statusCard[] = [
+    { name: "Total Books", value: 10, icon: faBook },
+    { name: "Active Borrowings", value: 10, icon: faBook },
+    { name: "Pending Fines", value: 10, icon: faBook },
+]
+
 export default function Dashboard() {
     return (
         <div className="min-h-screen p-6 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <StatusCard name="Total Books" value={10} icon={faBook} />
-                <StatusCard name="Active Borrowings" value={5} icon={faBook} />
-                <StatusCard name="Pending Fines" value={5} icon={faBook} />
+                {statusCards.map((statusCard, index) => (
+                    <StatusCard key={index} name={statusCard.name} value={statusCard.value} icon={statusCard.icon} />
+                ))}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
