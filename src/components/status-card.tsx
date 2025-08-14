@@ -1,7 +1,7 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface Prop {
     name: string,
@@ -12,8 +12,8 @@ interface Prop {
 export default function StatusCard({name, value, icon}: Prop) {
     return (
         <div className="flex items-center p-8 rounded-lg bg-white gap-6 shadow-md">
-            <div className="p-6 rounded-full bg-[var(--main-theme)]/20">
-                <FontAwesomeIcon icon={icon} className="text-[var(--main-theme)]" />
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[var(--main-theme)]/20">
+                <FontAwesomeIcon icon={icon} className="text-lg text-[var(--main-theme)]" />
             </div>
             <div>
                 <h1 className="text-xl text-gray-800 font-bold">{value}</h1>

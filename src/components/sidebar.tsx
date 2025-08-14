@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faFolder, faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
-    const [isMasterDataOpen, setIsMasterDataOpen] = useState(false);
+    const [isMasterDataOpen, setIsMasterDataOpen] = useState(true);
 
     return (
         <aside className="w-64 bg-white border-r border-gray-200 h-screen">
