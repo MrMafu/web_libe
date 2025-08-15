@@ -1,28 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faFolder, faUser, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faFolder, faUser, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
     const [isMasterDataOpen, setIsMasterDataOpen] = useState(true);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // untuk mobile toggle
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const handleOpenSidebar = () => setIsSidebarOpen(true);
+        document.addEventListener("openSidebar", handleOpenSidebar);
+        return () => document.removeEventListener("openSidebar", handleOpenSidebar);
+    }, []);
 
     return (
         <>
-            {/* Navbar di mobile */}
-            <div className="fixed top-0 left-0 pb-7 w-full bg-white shadow-md z-30 flex items-center justify-between p-4 md:hidden">
-                <h1 className="text-gray-800 text-2xl font-bold">Lib<span className="text-[var(--main-theme)]">E</span></h1>
-                <button
-                    onClick={() => setIsSidebarOpen(true)}
-                    className="text-gray-800 focus:outline-none"
-                >
-                    <FontAwesomeIcon icon={faBars} size="lg" />
-                </button>
-            </div>
-
-            {/* Overlay (background hitam transparan di mobile) */}
             {isSidebarOpen && (
                 <div
                     className="fixed inset-0 z-40 md:hidden"
@@ -30,11 +24,10 @@ export default function Sidebar() {
                 ></div>
             )}
 
-            {/* Sidebar */}
             <aside
-                className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-5 pt-20 transform transition-transform duration-300 
+                className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-5 pt-20 transform transition-transform duration-300
                 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-                md:translate-x-0 md:pt-20`}
+                md:translate-x-0 md:block`}
             >
                 <div className="absolute top-4 right-4 md:hidden">
                     <button
