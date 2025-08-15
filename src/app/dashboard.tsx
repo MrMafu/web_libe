@@ -18,10 +18,15 @@ const statusCards: statusCard[] = [
 
 export default function Dashboard() {
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 ml-0 md:ml-64">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {statusCards.map((statusCard, index) => (
-                    <StatusCard key={index} name={statusCard.name} value={statusCard.value} icon={statusCard.icon} />
+                    <StatusCard
+                        key={index}
+                        name={statusCard.name}
+                        value={statusCard.value}
+                        icon={statusCard.icon}
+                    />
                 ))}
             </div>
 
