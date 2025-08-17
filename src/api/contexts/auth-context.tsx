@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import api from "@/lib/axios";
+import { authService } from "../services/auth-service";
 
 interface User {
     id: number;
@@ -27,12 +27,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const init = async () => {
             try {
-                const res = await api.get("/me");
-                const u = res.data?.data?.user ?? res.data?.user ?? res.data;
-                if (mounted && u) {
-                    setUser(u);
-                }
-            } catch (err) {
+                const userData = await authService.getMe();
+                if (mounted && userData) setUser(userData);
+            } catch {
                 setUser(null);
             } finally {
                 if (mounted) setLoading(false);
@@ -41,24 +38,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         init();
 
-        return () => {
-            mounted = false;
-        };
+        return () => { mounted = false };
     }, []);
 
     const login = async (name: string, password: string) => {
         setLoading(true);
         try {
-            const { data } = await api.post("/login", { name, password });
-
-            const token = data?.data?.token ?? data?.token;
-            const u = data?.data?.user ?? data?.user ?? data;
+            const { token, user: u } = await authService.login({ name, password });
 
             if (!token) throw new Error("No token returned by login");
-
-            const maxAge = 60 * 60 * 2; // 2 hours
-            document.cookie = `auth_token=${token}; path=/; max-age=${maxAge}`;
-
             if (!u) throw new Error("Access denied or invalid credentials.");
 
             if (u.role !== "admin" && u.role !== "librarian") {
@@ -67,12 +55,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 throw new Error("Access denied. Only admins and librarians can login.");
             }
 
+            const maxAge = 60 * 60 * 2; // 2 hours
+            document.cookie = `auth_token=${token}; path=/; max-age=${maxAge}`;
             setUser(u);
         } catch (error: any) {
-            let msg = "Login failed";
-            if (error.response?.data?.message) msg = error.response.data.message;
-            else if (error.message) msg = error.message;
-            throw new Error(msg);
+            throw new Error(error.message || "Login failed");
         } finally {
             setLoading(false);
         }
@@ -80,13 +67,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = async () => {
         try {
-            await api.post("/logout");
-        } catch (err) {
-            // console.error("Logout error:", error);
+            await authService.logout();
+        } catch (error: any) {
+            throw new Error(error.message || "Logout failed");
+        } finally {
+            document.cookie = "auth_token=; path=/; max-age=0";
+            setUser(null);
+            setLoading(false);
         }
-        document.cookie = "auth_token=; path=/; max-age=0";
-        setUser(null);
-        setLoading(false);
     };
 
     const contextValue = {

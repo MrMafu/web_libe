@@ -4,7 +4,7 @@ function getCookie(name: string) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop()?.split(';').shift() ?? "";
-    
+
     return "";
 }
 
@@ -26,12 +26,14 @@ api.interceptors.request.use(config => {
 });
 
 api.interceptors.response.use(
-    response => response,
+    response => response.data,
     error => {
         if (error.response?.status === 401) {
             try { document.cookie = "auth_token=;path=/;max-age=0"; } catch {}
         }
-        return Promise.reject(error);
+        return Promise.reject(
+            error.response?.data?.message || error.message || "Request failed"
+        );
     }
 );
 
