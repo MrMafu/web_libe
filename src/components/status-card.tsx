@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface Prop {
     name: string,
-    value: number,
+    value: any,
     icon: any
 }
 

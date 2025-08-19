@@ -18,7 +18,12 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
     if (loading) {
         return (
-            <div>Loading...</div>
+            <div className="animate-pulse min-h-screen flex flex-col items-center justify-center space-y-4">
+                <h1 className="text-gray-800 text-4xl font-bold">
+                    Lib<span className="text-[var(--main-theme)]">E</span>
+                </h1>
+                <div className="animate-spin h-8 w-8 border-5 border-[var(--main-theme)]/50 border-t-transparent rounded-full"></div>
+            </div>
         );
     };
 

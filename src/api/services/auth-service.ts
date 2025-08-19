@@ -1,14 +1,14 @@
 import api from "../axios";
 
-interface LoginParams {
-    name: string;
-    password: string;
-}
-
-interface User {
+export interface User {
     id: number;
     name: string;
     role: string;
+}
+
+interface LoginParams {
+    name: string;
+    password: string;
 }
 
 interface LoginResponse {
