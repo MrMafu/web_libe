@@ -29,7 +29,7 @@ export default function Login() {
     return (
         <div className="flex items-center justify-center min-h-screen">
             <div className="max-w-sm w-full bg-white rounded-xl p-6 space-y-3 shadow-md">
-                <h1 className="text-xl text-gray-800 font-bold">Login to your account</h1>
+                <h1 className="text-xl text-gray-800 font-bold">Log In to your account</h1>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
                 <form onSubmit={handleSubmit} className="space-y-6 text-sm">
                     {/* Name Field */}

@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import "../globals.css";
 
 export const metadata: Metadata = {
-    title: "Login",
-    description: "Login page"
+    title: "LibE | Log In",
+    description: "Log In page"
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {

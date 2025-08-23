@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/api/contexts/auth-context";
 import ProtectedRoute from "@/components/protected-route";
 import "../globals.css";
-import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 
 const geistSans = Geist({
@@ -17,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LibE Dashboard",
-  description: "wiwik untuk sementara",
+  title: "LibE | Dashboard",
+  description: "Dashboard page",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -28,13 +27,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AuthProvider>
           <ProtectedRoute>
             <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <div className="flex flex-1 overflow-hidden">
-                <Sidebar />
-                <main className="flex-1 overflow-y-auto p-6">
-                  {children}
-                </main>
-              </div>
+              <Sidebar />
+              <main className="flex-1 overflow-y-auto p-6">
+                {children}
+              </main>
             </div>
           </ProtectedRoute>
         </AuthProvider>
