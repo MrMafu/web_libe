@@ -46,13 +46,13 @@ export default function Chart() {
                     <button
                         onClick={() => setView("7")}
                         className={`px-3 py-1 rounded ${view === "7" ? "bg-[var(--main-theme)] text-white" : "bg-[var(--main-theme)]/20 text-[var(--main-theme)]"}`}>
-                        7 Days
+                        Last 7 Days
                     </button>
 
                     <button
                         onClick={() => setView("30")}
                         className={`px-3 py-1 rounded ${view === "30" ? "bg-[var(--main-theme)] text-white" : "bg-[var(--main-theme)]/20 text-[var(--main-theme)]"}`}>
-                        30 Days
+                        Last 30 Days
                     </button>
                 </div>
             </div>

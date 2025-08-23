@@ -4,12 +4,21 @@ import Link from "next/link";
 import { useAuth } from "@/api/contexts/auth-context";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faFolder, faUser, faTimes, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+    faChevronRight,
+    faFolder,
+    faUser,
+    faTimes,
+    faSignOutAlt,
+    faCaretDown,
+    faUserCircle
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
     const [isMasterDataOpen, setIsMasterDataOpen] = useState(true);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const { logout } = useAuth();
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+    const { user, logout } = useAuth();
 
     useEffect(() => {
         const handleOpenSidebar = () => setIsSidebarOpen(true);
@@ -29,8 +38,8 @@ export default function Sidebar() {
             <aside
                 className={`fixed left-0 top-0 h-full w-64 z-1 border-r border-gray-200 bg-white transform transition-transform duration-300
                 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-                md:translate-x-0 md:block flex flex-col`}>
-                
+                md:translate-x-0 flex flex-col`}>
+
                 {/* Header section */}
                 <div className="flex items-center justify-between px-5 py-6 relative border-b border-gray-100">
                     <h1 className="select-none text-gray-800 text-2xl font-bold">
@@ -46,7 +55,7 @@ export default function Sidebar() {
                 </div>
 
                 {/* Navigation content */}
-                <div className="flex-grow overflow-y-auto py-4">
+                <div className="flex-1 overflow-y-auto py-4">
                     {/* Master data */}
                     <div className="px-4 mb-6">
                         <button
@@ -60,7 +69,7 @@ export default function Sidebar() {
                                     }`}
                             />
                         </button>
-                        
+
                         {isMasterDataOpen && (
                             <nav className="mt-2 ml-2 pl-4 border-l border-gray-200 space-y-2">
                                 {/* Users module */}
@@ -75,16 +84,40 @@ export default function Sidebar() {
                     </div>
                 </div>
 
-                {/* Log Out button */}
-                <div className="p-4 border-t border-gray-100 mt-auto">
+                {/* User dropdown section */}
+                <div className="relative px-4 py-4 border-t border-gray-200">
                     <button
-                        onClick={logout}
-                        className="flex items-center w-full p-3 space-x-2 text-sm text-red-500 hover:bg-red-50 rounded-md transition-colors">
-                        <FontAwesomeIcon icon={faSignOutAlt} />
-                        <span>Log Out</span>
+                        onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                        className="flex items-center w-full p-3 space-x-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-colors">
+                        <FontAwesomeIcon icon={faUserCircle} />
+                        <span className="flex-1 text-left">
+                            {user?.name || "User Menu"}
+                        </span>
+                        <FontAwesomeIcon
+                            icon={faChevronRight}
+                            className={`transform transition-transform duration-200 ease-in-out ${isUserDropdownOpen ? "rotate-270" : "rotate-90"
+                                }`}
+                        />
                     </button>
+
+                    {/* Dropdown menu */}
+                    {isUserDropdownOpen && (
+                        <div className="absolute bottom-full mb-2 left-4 w-[calc(100%-2rem)] bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden">
+                            <Link href="/" className="flex items-center w-full px-4 py-3 space-x-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors">
+                                <FontAwesomeIcon icon={faUser} />
+                                <span>Profile</span>
+                            </Link>
+                            <button
+                                onClick={logout}
+                                className="flex items-center w-full px-4 py-3 space-x-2 text-sm text-red-500 hover:bg-red-100 transition-colors">
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </aside>
         </>
     );
 }
+
