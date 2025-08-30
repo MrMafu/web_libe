@@ -53,8 +53,7 @@ export default function Sidebar() {
             <aside
                 className={`fixed left-0 top-0 h-full w-64 z-20 border-r border-gray-200 bg-white transform transition-transform duration-300
                 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-                md:translate-x-0 flex flex-col`}
-            >
+                md:translate-x-0 flex flex-col`}>
                 {/* Header section */}
                 <div className="flex items-center justify-between px-5 py-6 border-b border-gray-100">
                     <h1 className="select-none text-gray-800 text-2xl font-bold">
@@ -63,8 +62,7 @@ export default function Sidebar() {
                     <div className="md:hidden">
                         <button
                             onClick={() => setIsSidebarOpen(false)}
-                            className="text-gray-800 focus:outline-none"
-                        >
+                            className="cursor-pointer text-gray-800 focus:outline-none">
                             <FontAwesomeIcon icon={faTimes} size="lg" />
                         </button>
                     </div>
@@ -76,8 +74,7 @@ export default function Sidebar() {
                     <div className="px-4 mb-6" ref={masterRef}>
                         <button
                             onClick={() => setIsMasterDataOpen(!isMasterDataOpen)}
-                            className="flex items-center w-full p-3 space-x-2 text-sm text-gray-800 hover:bg-[var(--main-theme)]/10 rounded-md transition-colors"
-                        >
+                            className="flex items-center w-full p-3 space-x-2 text-sm text-gray-800 hover:bg-[var(--main-theme)]/10 rounded-md transition-colors">
                             <FontAwesomeIcon icon={faFolder} />
                             <span className="flex-1 text-left">Master Data</span>
                             <FontAwesomeIcon
@@ -92,17 +89,9 @@ export default function Sidebar() {
                             <nav className="mt-2 ml-2 pl-4 border-l border-gray-200 space-y-2">
                                 <Link
                                     href="/users"
-                                    className="flex items-center p-2 space-x-1 text-sm text-gray-700 hover:bg-[var(--main-theme)]/10 rounded-md transition-colors"
-                                >
+                                    className="flex items-center p-2 space-x-1 text-sm text-gray-700 hover:bg-[var(--main-theme)]/10 rounded-md transition-colors">
                                     <FontAwesomeIcon icon={faUser} />
                                     <span>Users</span>
-                                </Link>
-                                <Link
-                                    href="/books"
-                                    className="flex items-center p-2 space-x-1 text-sm text-gray-700 hover:bg-[var(--main-theme)]/10 rounded-md transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={faFolder} />
-                                    <span>Books</span>
                                 </Link>
                             </nav>
                         )}
@@ -113,10 +102,9 @@ export default function Sidebar() {
                 <div className="relative px-4 py-4 border-t border-gray-200" ref={userRef}>
                     <button
                         onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                        className="flex items-center w-full p-3 space-x-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-colors"
-                    >
+                        className="flex items-center w-full p-3 space-x-2 text-sm text-gray-800 hover:bg-gray-50 rounded-md transition-colors">
                         <FontAwesomeIcon icon={faUserCircle} />
-                        <span className="flex-1 text-left">
+                        <span className="flex-1 text-left text-[var(--main-theme)]">
                             {user?.name || "User Menu"}
                         </span>
                         <FontAwesomeIcon
@@ -128,18 +116,16 @@ export default function Sidebar() {
                     </button>
 
                     {isUserDropdownOpen && (
-                        <div className="absolute bottom-full mb-2 left-4 w-[calc(100%-2rem)] bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden">
+                        <div className="absolute bottom-full mb-2 left-4 w-[calc(100%-2rem)] bg-white rounded-md shadow-md overflow-hidden">
                             <Link
                                 href="/profile"
-                                className="flex items-center w-full px-4 py-3 space-x-2 text-sm text-gray-800 hover:bg-gray-100 transition-colors"
-                            >
+                                className="flex items-center w-full px-4 py-3 space-x-2 text-sm text-gray-800 hover:bg-gray-50 transition-colors">
                                 <FontAwesomeIcon icon={faUser} />
                                 <span>Profile</span>
                             </Link>
                             <button
                                 onClick={logout}
-                                className="flex items-center w-full px-4 py-3 space-x-2 text-sm text-red-500 hover:bg-red-100 transition-colors"
-                            >
+                                className="cursor-pointer flex items-center w-full px-4 py-3 space-x-2 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                 <FontAwesomeIcon icon={faSignOutAlt} />
                                 <span>Logout</span>
                             </button>

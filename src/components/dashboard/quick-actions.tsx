@@ -1,23 +1,39 @@
+import Link from "next/link";
+
 interface Action {
   label: string;
+  href: string;
+  onClick?: () => void;
 }
 
-interface Prop {
-  actions: Action[];
-}
+const actions: Action[] = [
+    { label: "Add New Book", href: "/" },
+    { label: "Process Return", href: "/" },
+    { label: "View All Borrowings", href: "/" },
+    { label: "Manage Users", href: "/" },
+];
 
-export default function QuickActions({ actions }: Prop) {
+export default function QuickActions() {
+    const notifyClose = () => {
+        document.dispatchEvent(new CustomEvent("closeQuickActions"));
+    };
+
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Quick Actions</h2>
-            <div className="flex flex-col justify-between">
-                {actions.map((action, index) => (
-                    <button
-                        key={index}
-                        className="w-full py-3 px-4 bg-[var(--main-theme)] text-white rounded-lg hover:bg-[var(--main-theme)]/90 transition text-left">
-                        {action.label}
-                    </button>
-                ))}
+        <div className="bg-white p-2 rounded-md">
+            <div className="flex flex-col">
+                {actions.map((action, idx) => {
+                    if (action.href) {
+                        return (
+                            <Link
+                                key={idx}
+                                href={action.href}
+                                onClick={notifyClose}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 rounded-sm hover:text-[var(--main-theme)] hover:bg-[var(--main-theme)]/10 transition-colors">
+                                {action.label}
+                            </Link>
+                        );
+                    }
+                })}
             </div>
         </div>
     )
