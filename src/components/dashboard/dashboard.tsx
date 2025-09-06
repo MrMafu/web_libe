@@ -95,12 +95,14 @@ export default function Dashboard() {
                 <div className="flex-1 flex items-center">
                     <h2
                         id="randomMessage"
-                        className="text-lg font-bold text-gray-800 text-left truncate">
-                        {greetingTemplates[greetingIndex].before}
-                        <span className="text-[var(--main-theme)]">
-                            {displayName}
+                        className="text-lg font-bold text-gray-800 text-left truncate flex flex-col sm:flex-row sm:flex-wrap">
+                        <span>
+                            {greetingTemplates[greetingIndex].before}
                         </span>
-                        {greetingTemplates[greetingIndex].after}
+                         <span className="flex flex-row items-center sm:ml-1">
+                          <span className="text-[var(--main-theme)]">{displayName}</span>
+                          <span>{greetingTemplates[greetingIndex].after}</span>
+                        </span>
                     </h2>
                 </div>
 
