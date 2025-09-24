@@ -1,40 +1,17 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { AuthProvider } from "@/api/contexts/auth-context";
+"use client";
+
 import ProtectedRoute from "@/components/protected-route";
-import "../globals.css";
 import Sidebar from "@/components/sidebar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "LibE | Dashboard",
-  description: "Dashboard page",
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>
-          <ProtectedRoute>
-            <div className="flex flex-col min-h-screen">
-              <Sidebar />
-              <main className="flex-1 overflow-y-auto p-6">
-                {children}
-              </main>
-            </div>
-          </ProtectedRoute>
-        </AuthProvider>
-      </body>
-    </html>
+    <ProtectedRoute>
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto p-6">
+          {children}
+        </main>
+      </div>
+    </ProtectedRoute>
   );
 }

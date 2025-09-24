@@ -115,7 +115,7 @@ export default function Dashboard() {
                             aria-haspopup="true"
                             className={
                                 `cursor-pointer flex items-center justify-center px-4 py-2 text-sm rounded-md transition-colors
-          ${isDashboardDropdownOpen
+                                ${isDashboardDropdownOpen
                                     ? "bg-[var(--main-theme)]/10 text-[var(--main-theme)] hover:bg-[var(--main-theme)]/10 hover:text-[var(--main-theme)]"
                                     : "bg-[var(--main-theme)] text-white hover:bg-[var(--main-theme)]/10 hover:text-[var(--main-theme)]"
                                 }`
