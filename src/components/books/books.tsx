@@ -19,6 +19,7 @@ export default function BooksPage() {
   const { books, loading, createBook, updateBook, deleteBook, fetchBooks } =
     useBooks();
 
+  const [showHiddenMenu, setShowHiddenMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingBook, setEditingBook] = useState<any>(null);
   const [subTopics, setSubTopics] = useState<SubTopic[]>([]);
@@ -68,6 +69,7 @@ export default function BooksPage() {
   useEffect(() => {
     loadTopics();
     loadSubTopics();
+    fetchBooks();
   }, []);
 
   useEffect(() => {
@@ -321,68 +323,73 @@ export default function BooksPage() {
       <div className="md:ml-64 min-h-screen bg-gray-50 p-6">
         <div className="mx-auto w-full space-y-6 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
           <section className="border border-gray-100 rounded-2xl shadow-sm p-6">
-             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-               <div>
-                 <p className="text-sm uppercase tracking-wide text-gray-500">
-                   Library catalog
-                 </p>
-                 <h1 className="text-2xl font-semibold text-gray-900">
-                   Books management
-                 </h1>
-                 <p className="text-sm text-gray-500 mt-1">
-                   Maintain topics, subtopics, and inventory from a single place.
-                 </p>
-               </div>
-               <div className="flex flex-wrap gap-2">
-                 <button
-                   onClick={() => {
-                     setEditingBook(null);
-                     setFormData({
-                       isbn: "",
-                       title: "",
-                       author: "",
-                       publisher: "",
-                       language: "",
-                       num_of_pages: 0,
-                       publication_date: "",
-                       price: 0,
-                       cover: null,
-                       sub_topic_id: "",
-                     });
-                     setShowModal(true);
-                   }}
-                   className="inline-flex items-center gap-2 rounded-xl border border-transparent bg-[var(--main-theme)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:brightness-95"
-                 >
-                   <FontAwesomeIcon icon={faPlus} />
-                   <span>Add Book</span>
-                 </button>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm uppercase tracking-wide text-gray-500">
+                  Library catalog
+                </p>
+                <h1 className="text-2xl font-semibold text-gray-900">
+                  Books management
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  Maintain topics, subtopics, and inventory from a single place.
+                </p>
+              </div>
 
-                 <button
-                   onClick={() => setShowTopicModal(true)}
-                   className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:border-[var(--main-theme)] hover:text-[var(--main-theme)]"
-                 >
-                   <FontAwesomeIcon icon={faPlus} />
-                   <span>Add Topic</span>
-                 </button>
-
-                 <button
-                   onClick={() => setShowSubTopicModal(true)}
-                   className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:border-[var(--main-theme)] hover:text-[var(--main-theme)]"
-                 >
-                   <FontAwesomeIcon icon={faPlus} />
-                   <span>Add SubTopic</span>
-                 </button>
-
-                 <button
-                   onClick={() => document.dispatchEvent(new Event("openSidebar"))}
-                   className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 md:hidden"
-                 >
-                   <FontAwesomeIcon icon={faBars} size="lg" />
-                   <span>Menu</span>
-                 </button>
-               </div>
-             </div>
-           </section>
+              <div className="flex flex-wrap gap-2">
+                {/* CREATE BOOK */}
+                <button
+                  onClick={() => {
+                    setEditingBook(null);
+                    setFormData({
+                      isbn: "",
+                      title: "",
+                      author: "",
+                      publisher: "",
+                      language: "",
+                      num_of_pages: 0,
+                      publication_date: "",
+                      price: 0,
+                      cover: null,
+                      sub_topic_id: "",
+                    });
+                    setShowModal(true);
+                  }}
+                  className="inline-flex items-center gap-2 rounded-xl border border-transparent bg-[var(--main-theme)] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:brightness-95"
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  <span>Add Book</span>
+                </button>
+                
+                {/* CREATE TOPIC */}
+                <button
+                  onClick={() => setShowTopicModal(true)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:border-[var(--main-theme)] hover:text-[var(--main-theme)]"
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  <span>Add Topic</span>
+                </button>
+                
+                {/* CREATE SUBTOPIC */}
+                <button
+                  onClick={() => setShowSubTopicModal(true)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:border-[var(--main-theme)] hover:text-[var(--main-theme)]"
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  <span>Add SubTopic</span>
+                </button>
+                
+                {/* MENU BUTTON (BUKA SIDEBAR) */}
+                <button
+                  onClick={() => document.dispatchEvent(new Event("openSidebar"))}
+                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 md:hidden"
+                >
+                  <FontAwesomeIcon icon={faBars} size="lg" />
+                  <span>Menu</span>
+                </button>
+              </div>
+            </div>
+          </section>
  
           <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
              {[
@@ -482,77 +489,82 @@ export default function BooksPage() {
              </div>
 
              <div className="mt-6 grid gap-4 md:grid-cols-2">
-               {[
-                 { name: "isbn", placeholder: "ISBN" },
-                 { name: "title", placeholder: "Title" },
-                 { name: "author", placeholder: "Author" },
-                 { name: "publisher", placeholder: "Publisher" },
-                 { name: "language", placeholder: "Language" },
+              {[
+                 { name: "isbn", label: "ISBN" },
+                 { name: "title", label: "Title" },
+                 { name: "author", label: "Author" },
+                 { name: "publisher", label: "Publisher" },
+                 { name: "language", label: "Language" },
                ].map((f) => (
-                 <input
-                   key={f.name}
-                   type="text"
-                   placeholder={f.placeholder}
-                   value={formData[f.name]}
-                   onChange={(e) =>
-                     setFormData({ ...formData, [f.name]: e.target.value })
-                   }
-                   className={fieldClass}
-                 />
+                 <div key={f.name} className="flex flex-col gap-1">
+                   <label className="text-sm font-medium text-gray-600">{f.label}</label>
+                   <input
+                     type="text"
+                     value={formData[f.name]}
+                     onChange={(e) =>
+                       setFormData({ ...formData, [f.name]: e.target.value })
+                     }
+                     className={fieldClass}
+                   />
+                 </div>
                ))}
 
-               <input
-                 type="number"
-                 placeholder="Number of pages"
-                 value={formData.num_of_pages}
-                 onChange={(e) =>
-                   setFormData({
-                     ...formData,
-                     num_of_pages: Number(e.target.value),
-                   })
-                 }
-                 className={fieldClass}
-               />
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600">Number of pages</label>
+                <input
+                  type="number"
+                  value={formData.num_of_pages}
+                  onChange={(e) =>
+                    setFormData({ ...formData, num_of_pages: Number(e.target.value) })
+                  }
+                  className={fieldClass}
+                />
+              </div>
 
-               <input
-                 type="date"
-                 value={formData.publication_date}
-                 onChange={(e) =>
-                   setFormData({
-                     ...formData,
-                     publication_date: e.target.value,
-                   })
-                 }
-                 className={fieldClass}
-               />
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600">Publication Date</label>
+                <input
+                  type="date"
+                  value={formData.publication_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, publication_date: e.target.value })
+                  }
+                  className={fieldClass}
+                />
+              </div>
 
-               <input
-                 type="number"
-                 placeholder="Price"
-                 value={formData.price}
-                 onChange={(e) =>
-                   setFormData({ ...formData, price: Number(e.target.value) })
-                 }
-                 className={fieldClass}
-               />
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600">Price</label>
+                <input
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: Number(e.target.value) })
+                  }
+                  className={fieldClass}
+                />
+              </div>
 
-               <select
-                 value={formData.sub_topic_id}
-                 onChange={(e) =>
-                   setFormData({
-                     ...formData,
-                     sub_topic_id: Number(e.target.value),
-                   })
-                 }
-                 className={fieldClass}
-               >
-                 <option value="">Select SubTopic</option>
-                 {subTopics.map((st) => (
-                   <option key={st.id} value={st.id}>
-                     {st.name} {st.topic ? `(${st.topic.name})` : ""}
-                   </option>
-                 ))}
-               </select>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600">SubTopic</label>
+                <select
+                  value={formData.sub_topic_id}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      sub_topic_id: Number(e.target.value),
+                    })
+                  }
+                  className={fieldClass}
+                >
+                  <option value="">Select SubTopic</option>
+                  {subTopics.map((st) => (
+                    <option key={st.id} value={st.id}>
+                      {st.name} {st.topic ? `(${st.topic.name})` : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
                <label className="md:col-span-2">
                  <span className="mb-2 block text-sm font-medium text-gray-600">

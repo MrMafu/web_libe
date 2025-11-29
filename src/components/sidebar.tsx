@@ -14,6 +14,7 @@ import {
   faBook,
   faClipboardList,
   faMoneyBillWave,
+  faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
@@ -75,6 +76,16 @@ export default function Sidebar() {
 
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto py-4">
+
+          <div className="px-4 mb-4">
+          <Link
+            href="/"
+            className="flex items-center p-3 space-x-2 text-sm text-gray-800 hover:bg-[var(--main-theme)]/10 rounded-md transition-colors">
+            <FontAwesomeIcon icon={faHouse} />
+            <span>Dashboard</span>
+          </Link>
+        </div>
+
           <div className="px-4 mb-6" ref={masterRef}>
             <button
               onClick={() => setIsMasterDataOpen(!isMasterDataOpen)}

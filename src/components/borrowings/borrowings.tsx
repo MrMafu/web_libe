@@ -33,21 +33,26 @@ export default function BorrowingsPage() {
 
   return (
     <div className="md:ml-64 min-h-screen bg-gray-50 p-6 transition-all duration-300">
-      <div className="flex justify-between mb-6">
-        <h1 className="text-xl font-bold">Borrowing Management</h1>
-        <button
-          onClick={() => (window.location.href = "/")}
-          className="px-4 py-2 bg-gray-300 rounded">
-          Back
-        </button>
+      {/* HEADER */}
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6 relative">
+        {/* Mobile Sidebar Toggle */}
         <button
           onClick={() => document.dispatchEvent(new Event("openSidebar"))}
-          className="cursor-pointer flex items-center md:hidden text-gray-800"
+          className="md:hidden absolute top-4 right-4 text-gray-700"
         >
           <FontAwesomeIcon icon={faBars} size="lg" />
         </button>
+
+        <h2 className="text-sm font-semibold text-gray-600 tracking-wide">
+          BORROWINGS MANAGEMENT
+        </h2>
+        <h1 className="text-2xl font-bold mt-1">Borrowings Administration</h1>
+        <p className="text-gray-500 text-sm mt-1">
+          Manage all active and returned borrowings.
+        </p>
       </div>
 
+      {/* TABLE CARD */}
       <div className="bg-white p-6 rounded-lg shadow-md">
         <DataTable
           columns={columns}
