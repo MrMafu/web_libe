@@ -89,7 +89,7 @@ export default function Dashboard() {
         ];
 
     return (
-        <div className={`space-y-6 ml-0 md:ml-64 ${loading ? "animate-pulse" : ""}`}>
+        <div className={`space-y-6 ml-0 md:ml-64 min-h-screen p-4 sm:p-6 transition-all duration-300 ${loading ? "animate-pulse" : ""}`}>
             <div className="top-0 left-0 w-full z-0 flex items-center justify-between relative">
                 {/* Greetings message */}
                 <div className="flex-1 flex items-center">
@@ -106,7 +106,7 @@ export default function Dashboard() {
                     </h2>
                 </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center">
                     {/* Quick actions */}
                     <div ref={dropdownRef} className="relative">
                         <button
@@ -133,7 +133,7 @@ export default function Dashboard() {
                     {/* Sidebar button */}
                     <button
                         onClick={openSidebar}
-                        className="cursor-pointer flex items-center md:hidden text-gray-800">
+                        className="cursor-pointer space-x-2 flex items-center md:hidden text-gray-800">
                         <FontAwesomeIcon icon={faBars} size="lg" />
                     </button>
                 </div>

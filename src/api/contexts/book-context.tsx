@@ -18,6 +18,7 @@ interface Book {
   id: number;
   isbn: string;
   cover: string | null;
+  cover_url?: string | null;
   title: string;
   language: string;
   num_of_pages: number;
@@ -57,46 +58,25 @@ export const BookProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true);
 
-      const listResp = await api.get("/admin/books");
-      const list = listResp?.data || [];
+      const resp = await api.get("/admin/books");
+      const list = resp?.data?.data ?? resp?.data ?? [];
 
-      const detailed = await Promise.all(
-        list.map(async (b: any) => {
-          try {
-            const d = await api.get(`/admin/books/${b.id}`);
-            const detail = d?.data || b;
-
-            let resolvedSubTopic: SubTopic | null = null;
-
-            if (detail.sub_topic) {
-              resolvedSubTopic = detail.sub_topic;
-            } else if (detail.subTopic) {
-              resolvedSubTopic = detail.subTopic;
-            } else if (detail.sub_topic_id) {
-              resolvedSubTopic =
-                subTopics.find((s) => s.id === detail.sub_topic_id) || null;
-            }
-
-            return {
-              id: detail.id,
-              isbn: detail.isbn,
-              cover: detail.cover ?? null,
-              title: detail.title,
-              language: detail.language,
-              num_of_pages: detail.num_of_pages ?? 0,
-              author: detail.author,
-              publisher: detail.publisher,
-              publication_date: detail.publication_date ?? null,
-              price: detail.price ?? 0,
-              sub_topic: resolvedSubTopic,
-            };
-          } catch {
-            return b;
-          }
-        })
+      setBooks(
+        list.map((item: any) => ({
+          id: item.id,
+          isbn: item.isbn,
+          cover: item.cover ?? null,
+          cover_url: item.cover_url ?? item.coverUrl ?? null,
+          title: item.title,
+          language: item.language,
+          num_of_pages: item.num_of_pages ?? 0,
+          author: item.author,
+          publisher: item.publisher,
+          publication_date: item.publication_date ?? null,
+          price: item.price ?? 0,
+          sub_topic: item.sub_topic ?? item.subTopic ?? null,
+        }))
       );
-
-      setBooks(detailed);
     } catch (err) {
       console.error("Failed fetch books:", err);
       setBooks([]);
