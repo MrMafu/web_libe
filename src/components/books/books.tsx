@@ -16,7 +16,7 @@ type Topic = { id: number; name: string };
 type SubTopic = { id: number; name: string; topic?: Topic | null };
 
 export default function BooksPage() {
-  const { books, loading, createBook, updateBook, deleteBook, fetchBooks } =
+  const { books, loading, createBook, updateBook, deleteBook, fetchBooks, copies, createCopy, fetchCopies } =
     useBooks();
 
   const [showHiddenMenu, setShowHiddenMenu] = useState(false);
@@ -36,7 +36,7 @@ export default function BooksPage() {
     cover: null,
     sub_topic_id: "",
   });
-
+  
   const [showTopicModal, setShowTopicModal] = useState(false);
   const [showSubTopicModal, setShowSubTopicModal] = useState(false);
   const [newTopic, setNewTopic] = useState("");
@@ -46,6 +46,13 @@ export default function BooksPage() {
   );
   const [filterTopic, setFilterTopic] = useState<string>("");
   const [filterSubTopic, setFilterSubTopic] = useState<string>("");
+  const [showCopyModal, setShowCopyModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<any>(null);
+  const [copyCount, setCopyCount] = useState(1);
+  const [copyCondition, setCopyCondition] = useState("good");
+  const [copyStatus, setCopyStatus] = useState("available");
+  const [copyPrefix, setCopyPrefix] = useState("");
+
 
   // Load Topic & SubTopic
   const loadTopics = async () => {
@@ -75,6 +82,18 @@ export default function BooksPage() {
   useEffect(() => {
     if (showModal) loadSubTopics();
   }, [showModal]);
+
+  // Copies Logic
+  const openCopyModal = (book: any) => {
+    setSelectedBook(book);
+    setShowCopyModal(true);
+  };
+
+  useEffect(() => {
+    if (selectedBook) {
+      setCopyPrefix(`BOOK-${selectedBook.id}-`);
+    }
+  }, [selectedBook]);
 
   // Filtering logic
   const filteredBooks = books.filter((b) => {
@@ -167,6 +186,31 @@ export default function BooksPage() {
     }
   };
 
+  // Add Copies
+  const handleAddCopies = async () => {
+    if (!selectedBook) return;
+    
+    try {
+      for (let i = 0; i < copyCount; i++) {
+        await createCopy({
+          book_id: selectedBook.id,
+          copy_code: `${copyPrefix}${String(i + 1).padStart(3, "0")}`,
+          condition: copyCondition,
+          status: copyStatus,
+        });
+      }
+    
+      await fetchCopies();
+      alert("Copies added!");
+    
+      setShowCopyModal(false);
+      setCopyCount(1);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add copies");
+    }
+  };
+
   // Create SubTopic
   const handleCreateSubTopic = async () => {
     if (!selectedTopicForSub || !newSubTopic.trim())
@@ -252,6 +296,22 @@ export default function BooksPage() {
     },
 
     {
+      name: "Stock",
+      grow: 0.7,
+      cell: (row) => {
+        const s = getCopyStats(row.id);
+        return (
+          <div className="text-xs">
+            <div>Total: {s.total}</div>
+            <div className="text-green-600">Available: {s.available}</div>
+            <div className="text-yellow-600">Borrowed: {s.borrowed}</div>
+            <div className="text-red-600">Lost: {s.lost}</div>
+          </div>
+        );
+      },
+    },
+
+    {
       name: "SubTopic",
       selector: (row) => row.sub_topic?.name ?? "-",
       grow: 1,
@@ -308,6 +368,13 @@ export default function BooksPage() {
           </button>
 
           <button
+            onClick={() => openCopyModal(row)}
+            className="text-green-600 hover:text-green-800"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+
+          <button
             onClick={() => handleDelete(row.id)}
             className="text-red-500 hover:text-red-700"
           >
@@ -317,6 +384,17 @@ export default function BooksPage() {
       ),
     },
   ];
+
+  // Copy statistics
+  const getCopyStats = (bookId: number) => {
+  const c = copies.filter(x => x.book_id === bookId);
+    return {
+      total: c.length,
+      available: c.filter(x => x.status === "available").length,
+      borrowed: c.filter(x => x.status === "borrowed").length,
+      lost: c.filter(x => x.status === "lost").length,
+    };
+  };
 
   return (
     <>
@@ -693,6 +771,92 @@ export default function BooksPage() {
            </div>
          </div>
        )}
+
+       {showCopyModal && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl">
+
+            <h3 className="text-xl font-semibold text-gray-900">
+              Add Copies for {selectedBook?.title}
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-1">
+              Register new physical copies for this book.
+            </p>
+
+            <div className="mt-4 space-y-4">
+
+              {/* JUMLAH */}
+              <input
+                type="number"
+                min={1}
+                placeholder="Number of copies"
+                className={fieldClass}
+                value={copyCount}
+                onChange={(e) => setCopyCount(Number(e.target.value))}
+              />
+
+              {/* PREFIX */}
+              <input
+                type="text"
+                className={fieldClass}
+                value={copyPrefix}
+                onChange={(e) => setCopyPrefix(e.target.value)}
+                placeholder="Prefix code (e.g., BOOK-12-)"
+              />
+
+              {/* CONDITION */}
+              <select
+                className={fieldClass}
+                value={copyCondition}
+                onChange={(e) => setCopyCondition(e.target.value)}
+              >
+                <option value="good">Good</option>
+                <option value="damaged">Damaged</option>
+              </select>
+
+              {/* STATUS */}
+              <select
+                className={fieldClass}
+                value={copyStatus}
+                onChange={(e) => setCopyStatus(e.target.value)}
+              >
+                <option value="available">Available</option>
+                <option value="borrowed">Borrowed</option>
+                <option value="lost">Lost</option>
+              </select>
+
+              {/* PREVIEW */}
+              <div className="mt-3 rounded-lg bg-gray-50 p-3 text-sm text-gray-700 border">
+                <p className="font-semibold mb-1">Preview codes:</p>
+                {Array.from({ length: copyCount }).map((_, i) => (
+                  <p key={i}>
+                    {copyPrefix}
+                    {String(i + 1).padStart(3, "0")}
+                  </p>
+                ))}
+              </div>
+              
+              {/* BUTTONS */}
+              <div className="flex flex-col gap-3 md:flex-row md:justify-end mt-4">
+                <button
+                  onClick={() => setShowCopyModal(false)}
+                  className="inline-flex w-full justify-center rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 md:w-auto"
+                >
+                  Cancel
+                </button>
+              
+                <button
+                  onClick={handleAddCopies}
+                  className="inline-flex w-full justify-center rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-700 md:w-auto"
+                >
+                  Add copies
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
      </>
    );
  }

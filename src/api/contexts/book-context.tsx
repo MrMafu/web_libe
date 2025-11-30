@@ -31,16 +31,30 @@ interface Book {
 
 interface BookContextType {
   books: Book[];
+  copies: BookCopy[];
   loading: boolean;
   fetchBooks: () => Promise<void>;
+  fetchCopies: () => Promise<void>;
   createBook: (data: FormData) => Promise<void>;
   updateBook: (id: number, data: FormData) => Promise<void>;
   deleteBook: (id: number) => Promise<void>;
+  createCopy: (data: any) => Promise<void>;
+  updateCopy: (id: number, data: any) => Promise<void>;
+  deleteCopy: (id: number) => Promise<void>;
+}
+
+interface BookCopy {
+  id: number;
+  book_id: number;
+  copy_code: string;
+  condition: "good" | "damaged";
+  status: "available" | "borrowed" | "lost";
 }
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
 
 export const BookProvider = ({ children }: { children: React.ReactNode }) => {
+  const [copies, setCopies] = useState<BookCopy[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
   const [subTopics, setSubTopics] = useState<SubTopic[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,6 +99,52 @@ export const BookProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const fetchCopies = async () => {
+    try {
+      const res = await api.get("/admin/bookcopies");
+      const list = res?.data?.data ?? res?.data ?? [];
+    
+      setCopies(
+        list.map((cp: any) => ({
+          id: cp.id,
+          book_id: cp.book_id,
+          copy_code: cp.copy_code,
+          condition: cp.condition,
+          status: cp.status,
+        }))
+      );
+    } catch (err) {
+      console.error("Failed fetching book copies", err);
+      setCopies([]);
+    }
+  };
+
+  const createCopy = async (data: any) => {
+    const fd = new FormData();
+
+    fd.append("book_id", String(data.book_id));
+    fd.append("copy_code", data.copy_code ?? generateCopyCode(data.book_id));
+    fd.append("condition", data.condition ?? "good");
+    fd.append("status", data.status ?? "available");
+
+    await api.post("/admin/bookcopies", fd);
+    await fetchCopies();
+  };
+
+  function generateCopyCode(bookId: number) {
+    return `BOOK-${bookId}-${Math.floor(Math.random() * 9999)}`;
+  }
+
+  const updateCopy = async (id: number, data: any) => {
+    await api.put(`/admin/bookcopies/${id}`, data);
+    await fetchCopies();
+  };
+
+  const deleteCopy = async (id: number) => {
+    await api.delete(`/admin/bookcopies/${id}`);
+    await fetchCopies();
+  };
+
   const createBook = async (data: FormData) => {
     await api.post("/admin/books", data);
     await fetchBooks();
@@ -101,12 +161,24 @@ export const BookProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    loadSubTopics().then(fetchBooks);
+    loadSubTopics().then(fetchBooks);fetchCopies();
   }, []);
 
   return (
     <BookContext.Provider
-      value={{ books, loading, fetchBooks, createBook, updateBook, deleteBook }}
+      value={{
+      books,
+      copies,
+      loading,
+      fetchBooks,
+      fetchCopies,
+      createBook,
+      updateBook,
+      deleteBook,
+      createCopy,
+      updateCopy,
+      deleteCopy
+    }}
     >
       {children}
     </BookContext.Provider>
